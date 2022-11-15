@@ -1,4 +1,5 @@
-import { BoxGeometry, Mesh, MeshNormalMaterial, Object3D, AmbientLight } from 'three'
+import { Object3D, AmbientLight } from 'three'
+import Capsule from './Capsule'
 
 export default class World {
   constructor ({ webgl, camera, mouse }) {
@@ -9,21 +10,27 @@ export default class World {
     this.container = new Object3D()
 
     this.setLight()
-    this.setCube()
+    this.setCapsule()
   }
 
   setLight () {
-    this.light = new AmbientLight(0xEEEEEE)
+    this.light = new AmbientLight(0xFFFFFF)
 
     this.container.add(this.light)
   }
 
-  setCube () {
-    const geometry = new BoxGeometry(2, 2)
-    const material = new MeshNormalMaterial()
+  setCapsule () {
+    this.capsule = new Capsule({
+      webgl: this.webgl
+    })
 
-    this.cube = new Mesh(geometry, material)
-    this.container.add(this.cube)
+    this.container.add(this.capsule.container)
+  }
+
+  load () {
+    return Promise.all[
+      this.capsule.load()
+    ]
   }
 
   render () {

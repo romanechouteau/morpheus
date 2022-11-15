@@ -1,6 +1,7 @@
 import { WebGLRenderer, sRGBEncoding, PerspectiveCamera, Scene } from 'three'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
-import Mouse from '~/webgl/utils/Mouse'
+import Mouse from '~/tools/Mouse'
 import World from '~/webgl/world/index'
 
 export default class Webgl {
@@ -9,13 +10,17 @@ export default class Webgl {
     this.height = 0
     this.canvas = canvas
     this.hasFocus = true
+    this.isLoaded = false
     this.pixelRatio = this.getPixelRatio()
 
     this.resize(window.innerWidth, window.innerHeight)
     this.setRenderer()
     this.setCamera()
     this.setMouse()
+    this.setLoader()
     this.setWorld()
+
+    this.load()
 
     window.addEventListener('resize', this.resize)
   }
@@ -45,13 +50,24 @@ export default class Webgl {
     this.mouse = new Mouse({ width: this.width, height: this.height })
   }
 
+  setLoader () {
+    this.dracoLoader = new DRACOLoader()
+    this.dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
+    this.dracoLoader.setDecoderConfig({ type: 'js' })
+  }
+
   setWorld () {
     this.world = new World({
-      webgl: this.webgl,
+      webgl: this,
       camera: this.camera,
       mouse: this.mouse
     })
     this.scene.add(this.world.container)
+  }
+
+  async load () {
+    await this.world.load()
+    this.isLoaded = true
   }
 
   resize = (width, height) => {
@@ -76,6 +92,7 @@ export default class Webgl {
 
   render = () => {
     requestAnimationFrame(this.render)
+    if (!this.isLoaded) { return }
     if (this.world) { this.world.render() }
     if (this.hasFocus && this.scene && this.camera && this.renderer) {
       this.renderer.render(this.scene, this.camera)

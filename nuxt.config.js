@@ -44,6 +44,9 @@ export default {
       if (config.module) {
         config.module.rules.push({ test: /\.(vert|frag)$/i, use: ['raw-loader'] })
       }
-    }
+    },
+    transpile: [
+      'three'
+    ]
   }
 }
