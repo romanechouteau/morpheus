@@ -21,7 +21,8 @@ export default class World {
 
   setCapsule () {
     this.capsule = new Capsule({
-      webgl: this.webgl
+      webgl: this.webgl,
+      mouse: this.mouse
     })
 
     this.container.add(this.capsule.container)
@@ -34,6 +35,6 @@ export default class World {
   }
 
   render () {
-    // actions to do each tick
+    if (this.capsule) { this.capsule.render() }
   }
 }
