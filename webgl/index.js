@@ -5,13 +5,14 @@ import Mouse from '~/tools/Mouse'
 import World from '~/webgl/world/index'
 
 export default class Webgl {
-  constructor ({ canvas }) {
+  constructor ({ canvas, store }) {
     this.width = 0
     this.height = 0
     this.canvas = canvas
     this.hasFocus = true
     this.isLoaded = false
     this.pixelRatio = this.getPixelRatio()
+    this.store = store
 
     this.resize(window.innerWidth, window.innerHeight)
     this.setRenderer()

@@ -3,8 +3,8 @@ export const STEPS = {
   CAPSULE: 1,
   PLUG_CAPSULE: 2,
   MORPHEUS: 3,
-  CHIP_PACKAGING: 4,
-  CHIP: 5,
+  CHIP: 4,
+  CHIP_MOVE: 5,
   CHIP_DEPLOY: 6
 }
 

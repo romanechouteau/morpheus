@@ -31,7 +31,8 @@ export default Vue.extend({
   },
   mounted () {
     this.webgl = new Webgl({
-      canvas: this.$refs.webglCanvas
+      canvas: this.$refs.webglCanvas,
+      store: this.$store
     })
     this.webgl.render()
 

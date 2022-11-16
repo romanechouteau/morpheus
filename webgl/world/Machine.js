@@ -6,9 +6,10 @@ import { loadGltf } from '../../tools/ModelLoader'
 import { getObjectSizeData } from '../../tools/sizing'
 
 export default class Machine {
-  constructor ({ webgl, mouse }) {
+  constructor ({ webgl, mouse, capsule }) {
     this.webgl = webgl
     this.mouse = mouse
+    this.capsule = capsule
 
     this.container = new Object3D()
     this.show = false
@@ -24,8 +25,6 @@ export default class Machine {
     this.container.add(this.gltf.scene)
 
     this.container.rotation.y = -Math.PI
-
-    this.resize()
   }
 
   resize () {
@@ -41,6 +40,7 @@ export default class Machine {
     this.showPosition = -half + this.height
 
     this.container.position.y = this.show ? this.showPosition : this.hidePosition
+    this.capsule.dragDropController.destinationY = this.container.position.y
   }
 
   handleStep (val) {
@@ -50,12 +50,15 @@ export default class Machine {
         .to(this.container.position, {
           y: this.showPosition,
           duration: 1,
-          ease: 'power2.out'
+          ease: 'power2.inOut',
+          onComplete: () => {
+            this.capsule.dragDropController.destinationY = this.container.position.y
+          }
         })
         .to(this.container.rotation, {
           y: 0,
           duration: 1,
-          ease: 'power2.out'
+          ease: 'power2.inOut'
         }, '0')
     }
   }

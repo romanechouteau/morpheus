@@ -8,7 +8,7 @@ const BASE_QUAT = new Quaternion()
 const DUMMY_QUAT = new Quaternion()
 const QUAT = new Quaternion()
 
-export default class DragController {
+export default class DragRotateController {
   constructor ({ container, mouse }) {
     this.mouse = mouse
     this.container = container
