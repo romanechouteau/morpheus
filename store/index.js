@@ -1,4 +1,4 @@
-const STEPS = {
+export const STEPS = {
   CAPSULE_PACKAGING: 0,
   CAPSULE: 1,
   PLUG_CAPSULE: 2,
@@ -19,7 +19,7 @@ export const getters = {
 }
 
 export const mutations = {
-  increment (state) {
+  incrementStep (state) {
     state.step++
   }
 }

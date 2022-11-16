@@ -21,8 +21,6 @@ export default class Webgl {
     this.setWorld()
 
     this.load()
-
-    window.addEventListener('resize', this.resize)
   }
 
   setRenderer () {
@@ -35,14 +33,14 @@ export default class Webgl {
       powerPreference: 'high-performance'
     })
     this.renderer.outputEncoding = sRGBEncoding
-    this.renderer.setClearColor(0x000000, 1.0)
+    this.renderer.setClearColor(0xFFFFFF, 1.0)
     this.renderer.setPixelRatio(this.pixelRatio)
     this.renderer.setSize(this.width, this.height)
   }
 
   setCamera () {
     this.camera = new PerspectiveCamera(45, this.width / this.height, 1, 1000)
-    this.camera.position.set(0, 0, 10)
+    this.camera.position.set(0, 0, 12)
     this.scene.add(this.camera)
   }
 
@@ -84,6 +82,9 @@ export default class Webgl {
     if (this.renderer) {
       this.renderer.setSize(this.width, this.height)
     }
+    if (this.world) {
+      this.world.resize()
+    }
   }
 
   getPixelRatio () {
@@ -97,5 +98,9 @@ export default class Webgl {
     if (this.hasFocus && this.scene && this.camera && this.renderer) {
       this.renderer.render(this.scene, this.camera)
     }
+  }
+
+  handleStep = (val) => {
+    if (this.world) { this.world.handleStep(val) }
   }
 }

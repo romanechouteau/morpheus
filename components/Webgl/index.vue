@@ -19,6 +19,14 @@ export default Vue.extend({
   computed: {
     isLoaded () {
       return this.webgl && this.webgl.isLoaded
+    },
+    step () {
+      return this.$store.state.step
+    }
+  },
+  watch: {
+    step (val) {
+      if (this.webgl) { this.webgl.handleStep(val) }
     }
   },
   mounted () {

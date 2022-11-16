@@ -1,5 +1,6 @@
 import { Object3D, AmbientLight } from 'three'
 import Capsule from './Capsule'
+import Machine from './Machine'
 
 export default class World {
   constructor ({ webgl, camera, mouse }) {
@@ -11,6 +12,7 @@ export default class World {
 
     this.setLight()
     this.setCapsule()
+    this.setMachine()
   }
 
   setLight () {
@@ -28,13 +30,33 @@ export default class World {
     this.container.add(this.capsule.container)
   }
 
+  setMachine () {
+    this.machine = new Machine({
+      webgl: this.webgl,
+      mouse: this.mouse
+    })
+
+    this.container.add(this.machine.container)
+  }
+
   load () {
-    return Promise.all[
-      this.capsule.load()
-    ]
+    return Promise.all([
+      this.capsule.load(),
+      this.machine.load()
+    ])
   }
 
   render () {
     if (this.capsule) { this.capsule.render() }
+  }
+
+  resize () {
+    if (this.capsule) { this.capsule.resize() }
+    if (this.machine) { this.machine.resize() }
+  }
+
+  handleStep (val) {
+    if (this.capsule) { this.capsule.handleStep(val) }
+    if (this.machine) { this.machine.handleStep(val) }
   }
 }

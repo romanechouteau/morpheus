@@ -14,6 +14,7 @@ export default class DragController {
     this.container = container
 
     this.dummy = new Object3D()
+    this.started = false
     this.dragging = false
     this.startMousePos = { x: 0, y: 0 }
     this.targetRotation = { x: 0, y: 0 }
@@ -21,10 +22,13 @@ export default class DragController {
 
   start () {
     window.addEventListener('mousedown', this.handleMouseDown)
+    this.started = true
   }
 
   stop () {
     window.removeEventListener('mousedown', this.handleMouseDown)
+    this.dragging = false
+    this.started = false
   }
 
   handleMouseDown = () => {
@@ -53,6 +57,8 @@ export default class DragController {
   }
 
   update () {
+    if (!this.started) { return null }
+
     if (this.dragging) {
       this.updateTarget()
     }
