@@ -5,14 +5,17 @@ import { lerp } from 'three/src/math/MathUtils'
 const LERP_FACTOR = 0.13
 
 export default class DragDropController {
-  constructor ({ container, mouse, store, camera }) {
+  constructor ({ container, mouse, store, camera, isHorizontal, handleFirstDrag }) {
     this.mouse = mouse
     this.store = store
     this.camera = camera
     this.container = container
+    this.isHorizontal = isHorizontal
+    this.handleFirstDrag = handleFirstDrag
 
     this.active = false
     this.dragging = false
+    this.hasDragged = false
     this.raycaster = new Raycaster()
     this.pointer = new Vector2()
   }
@@ -37,6 +40,13 @@ export default class DragDropController {
     if (intersects.length > 0) {
       this.dragging = true
       window.addEventListener('mouseup', this.handleMouseUp)
+
+      if (this.hasDragged === false) {
+        this.hasDragged = true
+        if (this.handleFirstDrag) {
+          this.handleFirstDrag()
+        }
+      }
     }
   }
 
@@ -45,21 +55,30 @@ export default class DragDropController {
     window.removeEventListener('mouseup', this.handleMouseUp)
   }
 
-  resize (height, windowHeight) {
-    this.height = height
-    this.windowHeight = windowHeight
+  resize (size, windowSize) {
+    this.size = size
+    this.windowSize = windowSize
+    this.updateBasePosition()
+  }
 
-    this.targetY = this.container.position.y
+  updateBasePosition () {
+    this.target = this.isHorizontal ? this.container.position.x : this.container.position.y
   }
 
   updateTarget () {
-    this.targetY = Math.min(this.mouse.yCoords * (this.windowHeight * 0.5), this.windowHeight * 0.5)
+    const coord = this.isHorizontal ? this.mouse.xCoords : this.mouse.yCoords
+    this.target = this.isHorizontal
+      ? Math.max(coord * (this.windowSize * 0.5), -this.windowSize * 0.5)
+      : Math.min(coord * (this.windowSize * 0.5), this.windowSize * 0.5)
   }
 
   checkPosition () {
-    if (this.destinationY === undefined) { return null }
+    if (this.destination === undefined) { return null }
 
-    if ((this.container.position.y - this.height * 0.5) < this.destinationY) {
+    if (
+      (!this.isHorizontal && this.container.position.y - this.size * 0.5 < this.destination) ||
+      (this.isHorizontal && this.container.position.x > this.destination)
+    ) {
       this.dragging = false
       this.active = false
       this.store.commit('incrementStep')
@@ -73,7 +92,11 @@ export default class DragDropController {
       this.updateTarget()
     }
 
-    this.container.position.y = lerp(this.container.position.y, this.targetY, LERP_FACTOR)
+    if (this.isHorizontal) {
+      this.container.position.x = lerp(this.container.position.x, this.target, LERP_FACTOR)
+    } else {
+      this.container.position.y = lerp(this.container.position.y, this.target, LERP_FACTOR)
+    }
 
     this.checkPosition()
   }

@@ -23,6 +23,7 @@ export default class DragRotateController {
   start () {
     window.addEventListener('mousedown', this.handleMouseDown)
     this.started = true
+    BASE_QUAT.setFromEuler(this.container.rotation)
   }
 
   stop () {

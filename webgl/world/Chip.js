@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { MeshNormalMaterial, Object3D } from 'three'
+import { MeshNormalMaterial, Object3D, Vector3 } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
@@ -7,14 +7,18 @@ import { STEPS } from '../../store'
 import { loadGltf } from '../../tools/ModelLoader'
 import { getObjectSizeData } from '../../tools/sizing'
 
-export default class Capsule {
+const VEC3 = new Vector3()
+
+export default class Chip {
   constructor ({ webgl, mouse }) {
     this.webgl = webgl
     this.mouse = mouse
 
-    this.top = false
-    this.customY = false
     this.container = new Object3D()
+    this.hide = true
+    this.showPosition = 0
+    this.customX = false
+    this.left = false
   }
 
   async load () {
@@ -24,33 +28,45 @@ export default class Capsule {
 
   init () {
     this.gltf.scene.children[0].material = new MeshNormalMaterial()
+    this.chipContainer = this.gltf.scene
     this.container.add(this.gltf.scene)
 
     this.dragRotateController = new DragRotateController({
       container: this.container,
-      mouse: this.mouse
+      mouse: this.mouse,
+      id: 'chip'
     })
-    this.dragRotateController.start()
 
     this.dragDropController = new DragDropController({
-      container: this.container,
+      container: this.chipContainer,
       camera: this.webgl.camera,
       mouse: this.mouse,
-      store: this.webgl.store
+      store: this.webgl.store,
+      isHorizontal: true,
+      handleFirstDrag: this.handleFirstDrag
     })
+  }
+
+  handleFirstDrag = () => {
+    this.chipContainer.getWorldPosition(VEC3)
+    this.webgl.world.container.add(this.chipContainer)
+    this.chipContainer.position.copy(VEC3)
   }
 
   resize () {
     const sizeData = getObjectSizeData(this.webgl.camera, this.container)
 
-    const height = sizeData.height
-    const windowHeight = sizeData.windowHeight
-    this.topPosition = windowHeight / 2 - height
+    const hidePosition = -sizeData.windowWidth / 2 - sizeData.width
+    this.leftPosition = -sizeData.windowWidth * 0.25
 
-    this.dragDropController.resize(height, windowHeight)
+    const chipData = getObjectSizeData(this.webgl.camera, this.chipContainer)
 
-    if (!this.customY) {
-      this.container.position.y = this.top ? this.topPosition : 0
+    this.dragDropController.resize(chipData.width, chipData.windowWidth)
+
+    if (!this.customX) {
+      this.container.position.x = this.hide
+        ? hidePosition
+        : this.left ? this.leftPosition : 0
     }
   }
 
@@ -60,26 +76,33 @@ export default class Capsule {
   }
 
   handleStep (val) {
-    if (val === STEPS.PLUG_CAPSULE) {
-      this.top = true
+    if (val === STEPS.CHIP) {
+      this.hide = false
+      gsap.to(this.container.position, {
+        x: 0,
+        duration: 1,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          this.dragRotateController.start()
+        }
+      })
+    } else if (val === STEPS.CHIP_MOVE) {
       this.dragRotateController.stop()
 
       gsap.timeline()
+        .to(this.container.position, {
+          x: this.leftPosition,
+          duration: 1,
+          ease: 'power2.inOut'
+        })
         .to(this.container.rotation, {
           x: 0,
           y: 0,
           z: 0,
           duration: 1,
-          ease: 'power2.inOut'
-        })
-        .to(this.container.position, {
-          y: this.topPosition,
-          duration: 1,
           ease: 'power2.inOut',
           onComplete: () => {
-            this.dragDropController.updateBasePosition()
             this.dragDropController.start()
-            this.customY = true
           }
         }, '0')
     }

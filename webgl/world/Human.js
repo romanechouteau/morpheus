@@ -5,11 +5,11 @@ import { STEPS } from '../../store'
 import { loadGltf } from '../../tools/ModelLoader'
 import { getObjectSizeData } from '../../tools/sizing'
 
-export default class Machine {
-  constructor ({ webgl, mouse, capsule }) {
+export default class Human {
+  constructor ({ webgl, mouse, chip }) {
     this.webgl = webgl
     this.mouse = mouse
-    this.capsule = capsule
+    this.chip = chip
 
     this.container = new Object3D()
     this.show = false
@@ -32,26 +32,25 @@ export default class Machine {
 
     const height = sizeData.height
     const windowHeight = sizeData.windowHeight
+    const windowWidth = sizeData.windowWidth
 
     const half = windowHeight / 2
     const hidePosition = -half - height
-    this.showPosition = -half + height
+    this.showPosition = 0
 
     this.container.position.y = this.show ? this.showPosition : hidePosition
-    this.capsule.dragDropController.destination = this.container.position.y
+    this.container.position.x = windowWidth * 0.25
+    this.chip.dragDropController.destination = this.container.position.x
   }
 
   handleStep (val) {
-    if (val === STEPS.PLUG_CAPSULE) {
+    if (val === STEPS.CHIP_MOVE) {
       this.show = true
       gsap.timeline()
         .to(this.container.position, {
           y: this.showPosition,
           duration: 1,
-          ease: 'power2.inOut',
-          onComplete: () => {
-            this.capsule.dragDropController.destination = this.container.position.y
-          }
+          ease: 'power2.inOut'
         })
         .to(this.container.rotation, {
           y: 0,

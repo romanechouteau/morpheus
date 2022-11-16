@@ -3,6 +3,8 @@ import { Object3D, AmbientLight } from 'three'
 
 import { STEPS } from '../../store'
 import { getObjectSizeData } from '../../tools/sizing'
+import Chip from './Chip'
+import Human from './Human'
 import Capsule from './Capsule'
 import Machine from './Machine'
 
@@ -20,6 +22,8 @@ export default class World {
     this.setLight()
     this.setCapsule()
     this.setMachine()
+    this.setChip()
+    this.setHuman()
   }
 
   setLight () {
@@ -48,10 +52,31 @@ export default class World {
     this.container.add(this.machineContainer)
   }
 
+  setChip () {
+    this.chip = new Chip({
+      webgl: this.webgl,
+      mouse: this.mouse
+    })
+
+    this.container.add(this.chip.container)
+  }
+
+  setHuman () {
+    this.human = new Human({
+      webgl: this.webgl,
+      mouse: this.mouse,
+      chip: this.chip
+    })
+
+    this.container.add(this.human.container)
+  }
+
   load () {
     return Promise.all([
       this.capsule.load(),
-      this.machine.load()
+      this.machine.load(),
+      this.chip.load(),
+      this.human.load()
     ]).then(() => this.onLoaded())
   }
 
@@ -61,11 +86,14 @@ export default class World {
 
   render () {
     if (this.capsule) { this.capsule.render() }
+    if (this.chip) { this.chip.render() }
   }
 
   resize () {
     if (this.capsule) { this.capsule.resize() }
     if (this.machine) { this.machine.resize() }
+    if (this.human) { this.human.resize() }
+    if (this.chip) { this.chip.resize() }
 
     if (this.machineContainer) {
       const sizeData = getObjectSizeData(this.webgl.camera, this.machineContainer)
@@ -77,6 +105,8 @@ export default class World {
   handleStep (val) {
     if (this.capsule) { this.capsule.handleStep(val) }
     if (this.machine) { this.machine.handleStep(val) }
+    if (this.chip) { this.chip.handleStep(val) }
+    if (this.human) { this.human.handleStep(val) }
 
     if (val === STEPS.CHIP) {
       this.hideMachine = true
@@ -85,6 +115,14 @@ export default class World {
         duration: 1,
         ease: 'power2.inOut'
       })
+    } else if (val === STEPS.CHIP_DEPLOY) {
+      gsap.timeline()
+        .to(this.camera.position, {
+          x: this.human.container.position.x,
+          z: 6,
+          duration: 2,
+          ease: 'power2.inOut'
+        })
     }
   }
 }
