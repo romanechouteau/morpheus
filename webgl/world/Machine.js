@@ -17,7 +17,6 @@ export default class Machine {
 
   async load () {
     this.gltf = await loadGltf('webgl/test.gltf', this.webgl.dracoLoader)
-    this.init()
   }
 
   init () {

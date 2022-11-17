@@ -13,13 +13,13 @@ export default class Capsule {
     this.mouse = mouse
 
     this.top = false
+    this.hide = true
     this.customY = false
     this.container = new Object3D()
   }
 
   async load () {
     this.gltf = await loadGltf('webgl/test.gltf', this.webgl.dracoLoader)
-    this.init()
   }
 
   init () {
@@ -38,6 +38,13 @@ export default class Capsule {
       mouse: this.mouse,
       store: this.webgl.store
     })
+
+    this.hide = false
+    gsap.to(this.container.position, {
+      y: 0,
+      duration: 2,
+      ease: 'power2.inOut'
+    })
   }
 
   resize () {
@@ -46,11 +53,12 @@ export default class Capsule {
     const height = sizeData.height
     const windowHeight = sizeData.windowHeight
     this.topPosition = windowHeight / 2 - height
+    const hidePosition = windowHeight / 2 + height
 
     this.dragDropController.resize(height, windowHeight)
 
     if (!this.customY) {
-      this.container.position.y = this.top ? this.topPosition : 0
+      this.container.position.y = this.hide ? hidePosition : this.top ? this.topPosition : 0
     }
   }
 

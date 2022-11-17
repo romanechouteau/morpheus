@@ -23,7 +23,6 @@ export default class Chip {
 
   async load () {
     this.gltf = await loadGltf('webgl/test.gltf', this.webgl.dracoLoader)
-    this.init()
   }
 
   init () {

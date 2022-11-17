@@ -81,6 +81,7 @@ export default class World {
   }
 
   onLoaded () {
+    this.init()
     this.resize()
   }
 
@@ -100,6 +101,13 @@ export default class World {
       this.machineHidePosition = sizeData.windowWidth / 2 + sizeData.width
       this.machineContainer.position.x = this.hideMachine ? this.machineHidePosition : 0
     }
+  }
+
+  init () {
+    if (this.capsule) { this.capsule.init() }
+    if (this.machine) { this.machine.init() }
+    if (this.human) { this.human.init() }
+    if (this.chip) { this.chip.init() }
   }
 
   handleStep (val) {
