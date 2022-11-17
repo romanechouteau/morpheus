@@ -208,7 +208,7 @@ void main() {
   vec3 mix1 = mix(color4, color3, step1);
   vec3 mix2 = mix(mix1, color2, step2);
   vec3 gradient = mix(mix2, color1, step3);
-  vec3 bgColor = mix(vec3(0., 0., 0.), gradient, uFade * 0. + 1.);
+  vec3 bgColor = mix(vec3(0., 0., 0.), gradient, uFade);
 
   float x = coords.x * uInterfaceRatio * uMeshRatio;
   vec4 tex = texture2D(uInterface, vec2(x + (1. - uInterfaceRatio * uMeshRatio) * 0.5, coords.y));
