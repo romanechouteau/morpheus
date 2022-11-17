@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Logo />
     <Webgl />
     <CapsulePackaging v-if="step === steps.CAPSULE_PACKAGING" />
     <Capsule v-if="step === steps.CAPSULE" />
@@ -9,6 +10,7 @@
 </template>
 
 <script>
+import Logo from '~/components/UI/Logo.vue'
 import Chip from '~/components/Steps/Chip.vue'
 import Webgl from '~/components/Webgl/index.vue'
 import Capsule from '~/components/Steps/Capsule.vue'
@@ -19,6 +21,7 @@ import { STEPS } from '~/store/index'
 
 export default {
   components: {
+    Logo,
     Chip,
     Webgl,
     Capsule,
@@ -36,6 +39,6 @@ export default {
 }
 </script>
 
-<style lang="styl">
+<style lang="stylus">
 @import '~/style/index.styl';
 </style>

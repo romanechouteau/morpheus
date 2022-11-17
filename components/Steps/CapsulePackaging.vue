@@ -1,6 +1,6 @@
 <template>
   <div class="step capsule-packaging">
-    <Button text="Next" @click="onClick" />
+    <Button @click="onClick" />
   </div>
 </template>
 
