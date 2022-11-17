@@ -78,7 +78,7 @@ export default class Screen {
     this.createObject()
     this.started = true
 
-    this.formatTemp = this.formatTemp()
+    this.formattedTemp = this.formatTemp()
   }
 
   createObject () {
