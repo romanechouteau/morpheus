@@ -178,9 +178,9 @@ export default class Screen {
     this.context.fillStyle = 'white'
     this.context.textBaseline = 'top'
     this.context.fillText(
-      formattedTemp, CANVAS_WIDTH / 2 - timeWidth / 2, top + TIME_FONT + INFO_MARGIN_TOP
+      this.formattedTemp, CANVAS_WIDTH / 2 - timeWidth / 2, top + TIME_FONT + INFO_MARGIN_TOP
     )
-    const tempWidth = this.context.measureText(formattedTemp).width
+    const tempWidth = this.context.measureText(this.formattedTemp).width
 
     const injectionX = CANVAS_WIDTH / 2 + timeWidth / 2
     const injectionY = top + TIME_FONT + INFO_MARGIN_TOP + MEDIUM_FONT / 2 - TINY_FONT / 2
