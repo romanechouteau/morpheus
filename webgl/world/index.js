@@ -8,6 +8,8 @@ import Human from './Human'
 import Capsule from './Capsule'
 import Machine from './Machine'
 
+export const GLTF_SCALE = 0.05
+
 export default class World {
   constructor ({ webgl, camera, mouse }) {
     this.mouse = mouse
@@ -124,14 +126,14 @@ export default class World {
       this.hideMachine = true
       gsap.to(this.machineContainer.position, {
         x: this.machineHidePosition,
-        duration: 1,
+        duration: 2,
         ease: 'power2.inOut'
       })
     } else if (val === STEPS.CHIP_DEPLOY) {
       gsap.timeline()
         .to(this.camera.position, {
           x: this.human.container.position.x,
-          z: 6,
+          z: 15,
           duration: 2,
           ease: 'power2.inOut'
         })

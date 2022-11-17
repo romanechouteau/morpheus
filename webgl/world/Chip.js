@@ -1,13 +1,16 @@
 import gsap from 'gsap'
-import { Object3D, Vector3 } from 'three'
+import { Object3D } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
 import { STEPS } from '../../store'
 import { loadGltf } from '../../tools/Loader'
 import { getObjectSizeData } from '../../tools/sizing'
+import materials from './Materials'
+import { GLTF_SCALE } from '.'
 
-const VEC3 = new Vector3()
+const SHOW_SCALE = 4
+const NORMAL_SCALE = 1.5
 
 export default class Chip {
   constructor ({ webgl, mouse }) {
@@ -26,9 +29,10 @@ export default class Chip {
   }
 
   init () {
-    this.container.scale.set(0.08, 0.08, 0.08)
-    this.chipContainer = this.gltf.scene
+    this.container.scale.set(GLTF_SCALE * SHOW_SCALE, GLTF_SCALE * SHOW_SCALE, GLTF_SCALE * SHOW_SCALE)
     this.container.add(this.gltf.scene)
+
+    materials.setMaterials(this.gltf.scene.children[0])
 
     this.dragRotateController = new DragRotateController({
       container: this.container,
@@ -37,19 +41,12 @@ export default class Chip {
     })
 
     this.dragDropController = new DragDropController({
-      container: this.chipContainer,
+      container: this.container,
       camera: this.webgl.camera,
       mouse: this.mouse,
       store: this.webgl.store,
-      isHorizontal: true,
-      handleFirstDrag: this.handleFirstDrag
+      isHorizontal: true
     })
-  }
-
-  handleFirstDrag = () => {
-    this.chipContainer.getWorldPosition(VEC3)
-    this.webgl.world.container.add(this.chipContainer)
-    this.chipContainer.position.copy(VEC3)
   }
 
   resize () {
@@ -58,7 +55,7 @@ export default class Chip {
     const hidePosition = -sizeData.windowWidth / 2 - sizeData.width
     this.leftPosition = -sizeData.windowWidth * 0.25
 
-    const chipData = getObjectSizeData(this.webgl.camera, this.chipContainer)
+    const chipData = getObjectSizeData(this.webgl.camera, this.container)
 
     this.dragDropController.resize(chipData.width, chipData.windowWidth)
 
@@ -79,7 +76,7 @@ export default class Chip {
       this.hide = false
       gsap.to(this.container.position, {
         x: 0,
-        duration: 1,
+        duration: 2,
         ease: 'power2.inOut',
         onComplete: () => {
           this.dragRotateController.start()
@@ -87,23 +84,41 @@ export default class Chip {
       })
     } else if (val === STEPS.CHIP_MOVE) {
       this.dragRotateController.stop()
+      this.left = true
 
       gsap.timeline()
-        .to(this.container.position, {
-          x: this.leftPosition,
-          duration: 1,
+        .to(this.container.scale, {
+          x: GLTF_SCALE * NORMAL_SCALE,
+          y: GLTF_SCALE * NORMAL_SCALE,
+          z: GLTF_SCALE * NORMAL_SCALE,
+          duration: 2,
           ease: 'power2.inOut'
         })
+        .to(this.container.position, {
+          x: this.leftPosition,
+          y: 0.5,
+          duration: 2,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            this.dragDropController.updateBasePosition()
+          }
+        }, '0')
         .to(this.container.rotation, {
           x: 0,
           y: 0,
           z: 0,
-          duration: 1,
+          duration: 2,
           ease: 'power2.inOut',
           onComplete: () => {
             this.dragDropController.start()
           }
         }, '0')
+    } else if (val === STEPS.CHIP_DEPLOY) {
+      gsap.to(this.container.position, {
+        z: -1,
+        duration: 2,
+        ease: 'power2.inOut'
+      })
     }
   }
 }
