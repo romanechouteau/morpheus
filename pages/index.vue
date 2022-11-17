@@ -1,7 +1,6 @@
 <template>
   <div>
     <Webgl />
-    <CapsulePackaging v-if="step === steps.CAPSULE_PACKAGING" />
     <Capsule v-if="step === steps.CAPSULE" />
     <Morpheus v-if="step === steps.MORPHEUS" />
     <Chip v-if="step === steps.CHIP" />
@@ -13,7 +12,6 @@ import Chip from '~/components/Steps/Chip.vue'
 import Webgl from '~/components/Webgl/index.vue'
 import Capsule from '~/components/Steps/Capsule.vue'
 import Morpheus from '~/components/Steps/Morpheus.vue'
-import CapsulePackaging from '~/components/Steps/CapsulePackaging.vue'
 
 import { STEPS } from '~/store/index'
 
@@ -22,8 +20,7 @@ export default {
     Chip,
     Webgl,
     Capsule,
-    Morpheus,
-    CapsulePackaging
+    Morpheus
   },
   computed: {
     step () {
