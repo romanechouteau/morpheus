@@ -18,8 +18,7 @@ export default class Machine {
     this.show = false
 
     this.screen = new Screen({ webgl: this.webgl })
-    // this.container.add(this.screen.container)
-    this.webgl.scene.add(this.screen.container)
+    this.container.add(this.screen.container)
   }
 
   async load () {
