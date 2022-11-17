@@ -2,6 +2,7 @@
   <div>
     <Logo />
     <Webgl />
+    <Gradient />
     <Capsule v-if="step === steps.CAPSULE" />
     <Morpheus v-if="step === steps.MORPHEUS" />
     <Chip v-if="step === steps.CHIP" />
@@ -10,6 +11,7 @@
 
 <script>
 import Logo from '~/components/UI/Logo.vue'
+import Gradient from '~/components/UI/Gradient.vue'
 import Chip from '~/components/Steps/Chip.vue'
 import Webgl from '~/components/Webgl/index.vue'
 import Capsule from '~/components/Steps/Capsule.vue'
@@ -20,6 +22,7 @@ import { STEPS } from '~/store/index'
 export default {
   components: {
     Logo,
+    Gradient,
     Chip,
     Webgl,
     Capsule,

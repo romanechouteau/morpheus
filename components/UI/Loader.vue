@@ -20,11 +20,14 @@
 .logo-loader
     width: 6em
 .rotating
-  animation rotating 1.5s linear infinite
+  animation rotating 2.5s linear infinite
 
 @keyframes rotating
-  from
-    transform rotate(0deg);
-  to
-    transform: rotate(360deg);
+  0%
+    transform rotate(0deg)
+  20%
+    transform rotate(-35deg)
+  100%
+    transform: rotate(360deg)
+
 </style>
