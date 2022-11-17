@@ -6,4 +6,5 @@
   position fixed
   z-index 1
   padding 1.5em
+  user-select none
 </style>
