@@ -39,11 +39,13 @@ export default class Capsule {
       store: this.webgl.store
     })
 
-    this.hide = false
     gsap.to(this.container.position, {
       y: 0,
       duration: 2,
-      ease: 'power2.inOut'
+      ease: 'power2.inOut',
+      onComplete: () => {
+        this.hide = false
+      }
     })
   }
 
