@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { MeshNormalMaterial, Object3D, Vector3 } from 'three'
+import { Object3D, Vector3 } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
@@ -22,11 +22,11 @@ export default class Chip {
   }
 
   async load () {
-    this.gltf = await loadGltf('webgl/test.gltf', this.webgl.dracoLoader)
+    this.gltf = await loadGltf('webgl/chip.gltf', this.webgl.dracoLoader)
   }
 
   init () {
-    this.gltf.scene.children[0].material = new MeshNormalMaterial()
+    this.container.scale.set(0.08, 0.08, 0.08)
     this.chipContainer = this.gltf.scene
     this.container.add(this.gltf.scene)
 

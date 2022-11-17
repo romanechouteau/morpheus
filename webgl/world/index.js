@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { Object3D, AmbientLight } from 'three'
+import { Object3D, AmbientLight, PointLight } from 'three'
 
 import { STEPS } from '../../store'
 import { getObjectSizeData } from '../../tools/sizing'
@@ -28,8 +28,11 @@ export default class World {
 
   setLight () {
     this.light = new AmbientLight(0xFFFFFF)
+    this.pointLight = new PointLight(0xFFFFFF, 1, 30)
+    this.pointLight.position.set(0, 4, 0)
 
     this.container.add(this.light)
+    this.container.add(this.pointLight)
   }
 
   setCapsule () {
