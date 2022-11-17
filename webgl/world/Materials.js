@@ -1,12 +1,39 @@
-import { MeshPhongMaterial } from 'three'
+import { MeshMatcapMaterial } from 'three'
+import { loadTexture } from '../../tools/Loader'
 
 class Materials {
   constructor () {
-    this.whiteMaterial = new MeshPhongMaterial({
-      color: 0xFFFFFF
+    this.textures = []
+  }
+
+  async loadTexture (name, url) {
+    this.textures[name] = await loadTexture(url)
+  }
+
+  load () {
+    return Promise.all([
+      this.loadTexture('white', require('~/assets/textures/white_shiny.png')),
+      this.loadTexture('black_shiny', require('~/assets/textures/black_shiny.png')),
+      this.loadTexture('black_matte', require('~/assets/textures/black_matte.png')),
+      this.loadTexture('chrome', require('~/assets/textures/chrome.png'))
+    ])
+  }
+
+  init () {
+    this.whiteMaterial = new MeshMatcapMaterial({
+      matcap: this.textures.white
     })
-    this.blackMaterial = new MeshPhongMaterial({
-      color: 0x333333
+    this.blackMatteMaterial = new MeshMatcapMaterial({
+      matcap: this.textures.black_matte,
+      color: 0x050505
+    })
+    this.blackShinyMaterial = new MeshMatcapMaterial({
+      matcap: this.textures.black_shiny,
+      color: 0x111111
+    })
+    this.chromeMaterial = new MeshMatcapMaterial({
+      matcap: this.textures.chrome,
+      color: 0x555555
     })
   }
 
@@ -16,12 +43,22 @@ class Materials {
 
       if (group.name.includes('white')) {
         this.setMaterial(group, this.whiteMaterial)
-        return
+        continue
       }
 
-      if (group.name.includes('black')) {
-        this.setMaterial(group, this.blackMaterial)
-        return
+      if (group.name.includes('black_matte')) {
+        this.setMaterial(group, this.blackMatteMaterial)
+        continue
+      }
+
+      if (group.name.includes('black_shiny')) {
+        this.setMaterial(group, this.blackShinyMaterial)
+        continue
+      }
+
+      if (group.name.includes('chrome')) {
+        this.setMaterial(group, this.chromeMaterial)
+        continue
       }
     }
   }

@@ -28,7 +28,7 @@ export default class Human {
     this.container.position.z = -5
     this.container.add(this.gltf.scene)
 
-    materials.setMaterials(this.gltf.scene.children[0])
+    materials.setMaterials(this.gltf.scene)
 
     this.container.rotation.y = -Math.PI * 2
   }

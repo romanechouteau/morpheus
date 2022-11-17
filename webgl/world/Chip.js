@@ -32,7 +32,7 @@ export default class Chip {
     this.container.scale.set(GLTF_SCALE * SHOW_SCALE, GLTF_SCALE * SHOW_SCALE, GLTF_SCALE * SHOW_SCALE)
     this.container.add(this.gltf.scene)
 
-    materials.setMaterials(this.gltf.scene.children[0])
+    materials.setMaterials(this.gltf.scene)
 
     this.dragRotateController = new DragRotateController({
       container: this.container,

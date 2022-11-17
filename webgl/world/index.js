@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { Object3D, AmbientLight, PointLight } from 'three'
+import { Object3D, AmbientLight } from 'three'
 
 import { STEPS } from '../../store'
 import { getObjectSizeData } from '../../tools/sizing'
@@ -7,6 +7,7 @@ import Chip from './Chip'
 import Human from './Human'
 import Capsule from './Capsule'
 import Machine from './Machine'
+import materials from './Materials'
 
 export const GLTF_SCALE = 0.05
 
@@ -30,11 +31,8 @@ export default class World {
 
   setLight () {
     this.light = new AmbientLight(0xFFFFFF)
-    this.pointLight = new PointLight(0xFFFFFF, 1, 30)
-    this.pointLight.position.set(0, 4, 0)
 
     this.container.add(this.light)
-    this.container.add(this.pointLight)
   }
 
   setCapsule () {
@@ -78,6 +76,7 @@ export default class World {
 
   load () {
     return Promise.all([
+      materials.load(),
       this.capsule.load(),
       this.machine.load(),
       this.chip.load(),
@@ -110,6 +109,7 @@ export default class World {
   }
 
   init () {
+    materials.init()
     if (this.capsule) { this.capsule.init() }
     if (this.machine) { this.machine.init() }
     if (this.human) { this.human.init() }
