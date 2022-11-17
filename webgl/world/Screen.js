@@ -46,11 +46,12 @@ export default class Screen {
     this.date = new Date()
     this.formattedDate = ''
     this.formattedState = ''
-    this.formattedTemp = ''
+    this.formattedTemp = '19°c'
     this.started = false
     this.container = new Object3D()
     this.styleLoaded = false
     this.icons = {}
+    this.localisation = [48.864716, 2.349014]
   }
 
   loadIcon (data) {
@@ -73,12 +74,13 @@ export default class Screen {
     ])
   }
 
-  init () {
+  async init () {
     this.createCanvas()
     this.createObject()
     this.started = true
 
-    this.formattedTemp = this.formatTemp()
+    this.getLocalisation()
+    this.formattedTemp = await this.formatTemp()
   }
 
   createObject () {
@@ -116,8 +118,22 @@ export default class Screen {
     return `${this.date.getHours().toString().padStart(2, '0')}:${this.date.getMinutes().toString().padStart(2, '0')}`
   }
 
-  formatTemp () {
-    return '19°c'
+  getLocalisation () {
+    if (window.navigator && window.navigator.geolocation) {
+      window.navigator.geolocation.getCurrentPosition(
+        async (data) => {
+          this.localisation = [data.coords.latitude, data.coords.longitude]
+          this.formattedTemp = await this.formatTemp()
+        },
+        () => {})
+    }
+  }
+
+  async formatTemp () {
+    const meteoData = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${this.localisation[0]}&lon=${this.localisation[1]}&appid=9ee99ca097bcd7aad431d1d1d6452685&lang=fr&units=metric`)
+    const json = await meteoData.json()
+    this.tempChanged = true
+    return `${Math.round(json.main.temp).toString().padStart(2, '0')}°c`
   }
 
   formatState () {
@@ -150,10 +166,12 @@ export default class Screen {
 
     if (!this.styleLoaded ||
       (formattedDate === this.formattedDate &&
-        formattedState === this.formattedState)) { return null }
+        formattedState === this.formattedState &&
+        this.tempChanged === false)) { return null }
 
     this.formattedDate = formattedDate
     this.formattedState = formattedState
+    this.tempChanged = false
 
     this.context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
 
