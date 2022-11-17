@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { MeshNormalMaterial, Object3D } from 'three'
+import { MeshPhongMaterial, Object3D } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
@@ -19,12 +19,14 @@ export default class Capsule {
   }
 
   async load () {
-    this.gltf = await loadGltf('webgl/test.gltf', this.webgl.dracoLoader)
+    this.gltf = await loadGltf('webgl/capsule.gltf', this.webgl.dracoLoader)
   }
 
   init () {
-    this.gltf.scene.children[0].material = new MeshNormalMaterial()
+    this.container.scale.set(0.08, 0.08, 0.08)
     this.container.add(this.gltf.scene)
+
+    this.setMaterials()
 
     this.dragRotateController = new DragRotateController({
       container: this.container,
@@ -49,12 +51,39 @@ export default class Capsule {
     })
   }
 
+  setMaterials () {
+    const base = this.gltf.scene.children[0]
+    const whiteMaterial = new MeshPhongMaterial({
+      color: 0xFFFFFF
+    })
+    const blackMaterial = new MeshPhongMaterial({
+      color: 0x333333
+    })
+
+    for (let i = 0; i < base.children.length; i++) {
+      const group = base.children[i]
+
+      this.setMaterial(group, group.name === 'etiquette' ? whiteMaterial : blackMaterial)
+    }
+  }
+
+  setMaterial (element, material) {
+    if (element.type === 'Mesh') {
+      element.material = material
+    }
+    if (element.children && element.children.length > 0) {
+      element.children.forEach((object) => {
+        this.setMaterial(object, material)
+      })
+    }
+  }
+
   resize () {
     const sizeData = getObjectSizeData(this.webgl.camera, this.container)
 
     const height = sizeData.height
     const windowHeight = sizeData.windowHeight
-    this.topPosition = windowHeight / 2 - height
+    this.topPosition = windowHeight / 2 - height * 0.75
     const hidePosition = windowHeight / 2 + height
 
     this.dragDropController.resize(height, windowHeight)

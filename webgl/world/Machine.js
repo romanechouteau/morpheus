@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { MeshNormalMaterial, Object3D } from 'three'
+import { Object3D } from 'three'
 
 import { STEPS } from '../../store'
 import { loadGltf } from '../../tools/Loader'
@@ -21,12 +21,12 @@ export default class Machine {
   }
 
   async load () {
-    this.gltf = await loadGltf('webgl/test.gltf', this.webgl.dracoLoader)
+    this.gltf = await loadGltf('webgl/morpheus.gltf', this.webgl.dracoLoader)
     await this.screen.load()
   }
 
   init () {
-    this.gltf.scene.children[0].material = new MeshNormalMaterial()
+    this.container.scale.set(0.08, 0.08, 0.08)
     this.container.add(this.gltf.scene)
 
     this.screen.init()

@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { MeshNormalMaterial, Object3D } from 'three'
+import { Object3D } from 'three'
 
 import { STEPS } from '../../store'
 import { loadGltf } from '../../tools/Loader'
@@ -16,11 +16,11 @@ export default class Human {
   }
 
   async load () {
-    this.gltf = await loadGltf('webgl/test.gltf', this.webgl.dracoLoader)
+    this.gltf = await loadGltf('webgl/human.gltf', this.webgl.dracoLoader)
   }
 
   init () {
-    this.gltf.scene.children[0].material = new MeshNormalMaterial()
+    this.container.scale.set(0.08, 0.08, 0.08)
     this.container.add(this.gltf.scene)
 
     this.container.rotation.y = -Math.PI
