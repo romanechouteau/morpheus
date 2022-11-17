@@ -47,7 +47,7 @@ export default {
       }
     },
     transpile: [
-      'three'
+      'gsap', 'three/examples/jsm/loaders/GLTFLoader', 'three/examples/jsm/loaders/DRACOLoader', 'three/src/math/MathUtils'
     ]
   }
 }

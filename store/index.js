@@ -1,15 +1,14 @@
 export const STEPS = {
-  CAPSULE_PACKAGING: 0,
-  CAPSULE: 1,
-  PLUG_CAPSULE: 2,
-  MORPHEUS: 3,
-  CHIP: 4,
-  CHIP_MOVE: 5,
-  CHIP_DEPLOY: 6
+  CAPSULE: 0,
+  PLUG_CAPSULE: 1,
+  MORPHEUS: 2,
+  CHIP: 3,
+  CHIP_MOVE: 4,
+  CHIP_DEPLOY: 5
 }
 
 export const state = () => ({
-  step: STEPS.CAPSULE_PACKAGING
+  step: STEPS.CAPSULE
 })
 
 export const getters = {
