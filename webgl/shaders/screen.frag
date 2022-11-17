@@ -5,7 +5,6 @@ uniform float uFade;
 uniform float uInterfaceRatio;
 uniform float uMeshRatio;
 uniform sampler2D uInterface;
-uniform sampler2D uNoise;
 
 uniform vec3 color1;
 uniform vec3 color2;

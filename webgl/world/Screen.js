@@ -1,12 +1,11 @@
 import gsap from 'gsap'
 import {
   ClampToEdgeWrapping, Mesh, Object3D, PlaneGeometry, ShaderMaterial,
-  UVMapping, CanvasTexture, MirroredRepeatWrapping
+  UVMapping, CanvasTexture
 } from 'three'
 
 import vert from '../shaders/screen.vert'
 import frag from '../shaders/screen.frag'
-import { loadTexture } from '../../tools/Loader'
 
 const CANVAS_HEIGHT = 384
 const CANVAS_WIDTH = 2 * CANVAS_HEIGHT
@@ -34,10 +33,8 @@ export default class Screen {
     this.styleLoaded = false
   }
 
-  async load () {
-    this.noise = await loadTexture('textures/noise.png')
-    this.noise.wrapS = MirroredRepeatWrapping
-    this.noise.wrapT = MirroredRepeatWrapping
+  load () {
+    return new Promise(resolve => resolve())
   }
 
   init () {
@@ -55,7 +52,6 @@ export default class Screen {
       uniforms: {
         uTime: { value: 0.0 },
         uFade: { value: 0.0 },
-        uNoise: { value: this.noise },
         uInterface: { value: this.texture },
         uMeshRatio: { value: geomRatio },
         uInterfaceRatio: { value: CANVAS_HEIGHT / CANVAS_WIDTH },
