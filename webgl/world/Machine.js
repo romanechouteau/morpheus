@@ -2,8 +2,9 @@ import gsap from 'gsap'
 import { MeshNormalMaterial, Object3D } from 'three'
 
 import { STEPS } from '../../store'
-import { loadGltf } from '../../tools/ModelLoader'
+import { loadGltf } from '../../tools/Loader'
 import { getObjectSizeData } from '../../tools/sizing'
+import Screen from './Screen'
 
 export default class Machine {
   constructor ({ webgl, mouse, capsule }) {
@@ -13,15 +14,22 @@ export default class Machine {
 
     this.container = new Object3D()
     this.show = false
+
+    this.screen = new Screen({ webgl: this.webgl })
+    // this.container.add(this.screen.container)
+    this.webgl.scene.add(this.screen.container)
   }
 
   async load () {
     this.gltf = await loadGltf('webgl/test.gltf', this.webgl.dracoLoader)
+    await this.screen.load()
   }
 
   init () {
     this.gltf.scene.children[0].material = new MeshNormalMaterial()
     this.container.add(this.gltf.scene)
+
+    this.screen.init()
 
     this.container.rotation.y = -Math.PI
   }
@@ -57,6 +65,12 @@ export default class Machine {
           duration: 1,
           ease: 'power2.inOut'
         }, '0')
+    } else if (val === STEPS.MORPHEUS) {
+      this.screen.startFade()
     }
+  }
+
+  render () {
+    if (this.screen) { this.screen.render() }
   }
 }

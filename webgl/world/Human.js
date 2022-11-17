@@ -2,7 +2,7 @@ import gsap from 'gsap'
 import { MeshNormalMaterial, Object3D } from 'three'
 
 import { STEPS } from '../../store'
-import { loadGltf } from '../../tools/ModelLoader'
+import { loadGltf } from '../../tools/Loader'
 import { getObjectSizeData } from '../../tools/sizing'
 
 export default class Human {

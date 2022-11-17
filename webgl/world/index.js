@@ -88,6 +88,7 @@ export default class World {
   render () {
     if (this.capsule) { this.capsule.render() }
     if (this.chip) { this.chip.render() }
+    if (this.machine) { this.machine.render() }
   }
 
   resize () {

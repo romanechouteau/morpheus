@@ -4,7 +4,7 @@ import { MeshNormalMaterial, Object3D, Vector3 } from 'three'
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
 import { STEPS } from '../../store'
-import { loadGltf } from '../../tools/ModelLoader'
+import { loadGltf } from '../../tools/Loader'
 import { getObjectSizeData } from '../../tools/sizing'
 
 const VEC3 = new Vector3()
