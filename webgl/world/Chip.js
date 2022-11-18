@@ -1,11 +1,13 @@
 import gsap from 'gsap'
-import { Object3D } from 'three'
+import { Object3D, ShaderMaterial } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
 import { STEPS } from '../../store'
 import { loadGltf } from '../../tools/Loader'
 import { getObjectSizeData } from '../../tools/sizing'
+import vert from '../shaders/led.vert'
+import frag from '../shaders/led.frag'
 import materials from './Materials'
 import { GLTF_SCALE } from '.'
 
@@ -22,6 +24,7 @@ export default class Chip {
     this.showPosition = 0
     this.customX = false
     this.left = false
+    this.fade = 0
   }
 
   async load () {
@@ -32,7 +35,17 @@ export default class Chip {
     this.container.scale.set(GLTF_SCALE * SHOW_SCALE, GLTF_SCALE * SHOW_SCALE, GLTF_SCALE * SHOW_SCALE)
     this.container.add(this.gltf.scene)
 
-    materials.setMaterials(this.gltf.scene)
+    materials.setMaterials(this.gltf.scene.children[0])
+
+    this.ledMaterial = new ShaderMaterial({
+      vertexShader: vert,
+      fragmentShader: frag,
+      uniforms: {
+        uFade: { value: 0.0 }
+      }
+    })
+    const led = this.gltf.scene.children[0].getObjectByName('led')
+    led.material = this.ledMaterial
 
     this.dragRotateController = new DragRotateController({
       container: this.container,
@@ -69,6 +82,10 @@ export default class Chip {
   render () {
     if (this.dragRotateController) { this.dragRotateController.update() }
     if (this.dragDropController) { this.dragDropController.update() }
+    if (this.ledMaterial) {
+      this.ledMaterial.uniforms.uFade.value = this.fade
+      this.ledMaterial.uniforms.uFade.needsUpdate = true
+    }
   }
 
   handleStep (val) {
@@ -114,11 +131,17 @@ export default class Chip {
           }
         }, '0')
     } else if (val === STEPS.CHIP_DEPLOY) {
-      gsap.to(this.container.position, {
-        z: -1,
-        duration: 2,
-        ease: 'power2.inOut'
-      })
+      gsap.timeline()
+        .to(this.container.position, {
+          z: -1,
+          duration: 2,
+          ease: 'power2.inOut'
+        })
+        .to(this, {
+          fade: 1,
+          duration: 2,
+          ease: 'linear'
+        })
     }
   }
 }

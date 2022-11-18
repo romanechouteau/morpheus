@@ -34,7 +34,7 @@ export default class Webgl {
       powerPreference: 'high-performance'
     })
     this.renderer.outputEncoding = sRGBEncoding
-    this.renderer.setClearColor(0xFFFFFF, 1.0)
+    this.renderer.setClearColor(0xDEDEDE, 1.0)
     this.renderer.setPixelRatio(this.pixelRatio)
     this.renderer.setSize(this.width, this.height)
   }
