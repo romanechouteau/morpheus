@@ -1,12 +1,14 @@
 import gsap from 'gsap'
 import {
-  ClampToEdgeWrapping, Mesh, Object3D, PlaneGeometry, ShaderMaterial,
+  ClampToEdgeWrapping, Object3D, ShaderMaterial,
   UVMapping, CanvasTexture
 } from 'three'
 
 import vert from '../shaders/screen.vert'
 import frag from '../shaders/screen.frag'
 import { STEPS } from '../../store'
+import { loadGltf } from '../../tools/Loader'
+import { GLTF_SCALE } from '.'
 
 const CANVAS_HEIGHT = 384
 const CANVAS_WIDTH = 2 * CANVAS_HEIGHT
@@ -68,9 +70,14 @@ export default class Screen {
     })
   }
 
+  async loadModel () {
+    this.gltf = await loadGltf('webgl/screen.gltf', this.webgl.dracoLoader)
+  }
+
   load () {
     return Promise.all([
-      ...ICONS.map(data => this.loadIcon(data))
+      ...ICONS.map(data => this.loadIcon(data)),
+      this.loadModel()
     ])
   }
 
@@ -84,8 +91,8 @@ export default class Screen {
   }
 
   createObject () {
-    const geom = new PlaneGeometry(20, 3)
-    const geomRatio = 20 / 3
+    this.screen = this.gltf.scene.children[0]
+    const geomRatio = 80 / 3
     this.screenMaterial = new ShaderMaterial({
       vertexShader: vert,
       fragmentShader: frag,
@@ -101,7 +108,13 @@ export default class Screen {
         color4: { value: [47 / 255, 171 / 255, 253 / 255] }
       }
     })
-    this.screen = new Mesh(geom, this.screenMaterial)
+    this.screen.material = this.screenMaterial
+
+    this.container.scale.set(1 / GLTF_SCALE * 5, 1 / GLTF_SCALE * 5, 1 / GLTF_SCALE * 5)
+    this.container.position.x = 2
+    this.container.position.y = -5
+    this.container.rotation.y = -Math.PI / 11
+
     this.container.add(this.screen)
   }
 

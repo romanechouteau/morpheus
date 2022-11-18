@@ -192,10 +192,12 @@ float pnoise(vec3 P, vec3 rep)
 }
 
 void main() {
+  vec2 coords = vec2(vUv.x, 1. - vUv.y);
+
   float zoom = 0.5;
   float noise = cnoise(vec3(
-    vUv.x * zoom * uMeshRatio + uTime * 0.3,
-    vUv.y * zoom + uTime * 0.5,
+    coords.x * zoom * uMeshRatio + uTime * 0.3,
+    coords.y * zoom + uTime * 0.5,
     uTime
   )) * 0.5 + 0.5;
 
@@ -208,9 +210,10 @@ void main() {
   vec3 gradient = mix(mix2, color1, step3);
   vec3 bgColor = mix(vec3(0., 0., 0.), gradient, uFade);
 
-  float x = vUv.x * uInterfaceRatio * uMeshRatio;
-  vec4 tex = texture2D(uInterface, vec2(x + (1. - uInterfaceRatio * uMeshRatio) * 0.5, vUv.y));
-  vec3 color = bgColor * (1. - tex.a) + tex.rgb * tex.a;
+  float x = coords.x * uInterfaceRatio * uMeshRatio;
+  vec4 tex = texture2D(uInterface, vec2(x + (1. - uInterfaceRatio * uMeshRatio) * 0.5, coords.y));
+
+  vec3 color = bgColor + tex.rgb * tex.a;
 
   gl_FragColor = vec4(color.rgb, 1.);
 }

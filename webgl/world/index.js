@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { Object3D, AmbientLight, PointLight } from 'three'
+import { Object3D, AmbientLight } from 'three'
 
 import { STEPS } from '../../store'
 import { getObjectSizeData } from '../../tools/sizing'
@@ -7,6 +7,9 @@ import Chip from './Chip'
 import Human from './Human'
 import Capsule from './Capsule'
 import Machine from './Machine'
+import materials from './Materials'
+
+export const GLTF_SCALE = 0.05
 
 export default class World {
   constructor ({ webgl, camera, mouse }) {
@@ -28,11 +31,8 @@ export default class World {
 
   setLight () {
     this.light = new AmbientLight(0xFFFFFF)
-    this.pointLight = new PointLight(0xFFFFFF, 1, 30)
-    this.pointLight.position.set(0, 4, 0)
 
     this.container.add(this.light)
-    this.container.add(this.pointLight)
   }
 
   setCapsule () {
@@ -76,6 +76,7 @@ export default class World {
 
   load () {
     return Promise.all([
+      materials.load(),
       this.capsule.load(),
       this.machine.load(),
       this.chip.load(),
@@ -108,6 +109,7 @@ export default class World {
   }
 
   init () {
+    materials.init()
     if (this.capsule) { this.capsule.init() }
     if (this.machine) { this.machine.init() }
     if (this.human) { this.human.init() }
@@ -124,14 +126,14 @@ export default class World {
       this.hideMachine = true
       gsap.to(this.machineContainer.position, {
         x: this.machineHidePosition,
-        duration: 1,
+        duration: 2,
         ease: 'power2.inOut'
       })
     } else if (val === STEPS.CHIP_DEPLOY) {
       gsap.timeline()
         .to(this.camera.position, {
           x: this.human.container.position.x,
-          z: 6,
+          z: 15,
           duration: 2,
           ease: 'power2.inOut'
         })

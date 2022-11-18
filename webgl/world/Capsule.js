@@ -1,11 +1,13 @@
 import gsap from 'gsap'
-import { MeshPhongMaterial, Object3D } from 'three'
+import { Object3D } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
 import { STEPS } from '../../store'
 import { loadGltf } from '../../tools/Loader'
 import { getObjectSizeData } from '../../tools/sizing'
+import materials from './Materials'
+import { GLTF_SCALE } from '.'
 
 export default class Capsule {
   constructor ({ webgl, mouse }) {
@@ -23,10 +25,10 @@ export default class Capsule {
   }
 
   init () {
-    this.container.scale.set(0.08, 0.08, 0.08)
+    this.container.scale.set(GLTF_SCALE, GLTF_SCALE, GLTF_SCALE)
     this.container.add(this.gltf.scene)
 
-    this.setMaterials()
+    materials.setMaterials(this.gltf.scene.children[0])
 
     this.dragRotateController = new DragRotateController({
       container: this.container,
@@ -49,33 +51,6 @@ export default class Capsule {
         this.hide = false
       }
     })
-  }
-
-  setMaterials () {
-    const base = this.gltf.scene.children[0]
-    const whiteMaterial = new MeshPhongMaterial({
-      color: 0xFFFFFF
-    })
-    const blackMaterial = new MeshPhongMaterial({
-      color: 0x333333
-    })
-
-    for (let i = 0; i < base.children.length; i++) {
-      const group = base.children[i]
-
-      this.setMaterial(group, group.name === 'etiquette' ? whiteMaterial : blackMaterial)
-    }
-  }
-
-  setMaterial (element, material) {
-    if (element.type === 'Mesh') {
-      element.material = material
-    }
-    if (element.children && element.children.length > 0) {
-      element.children.forEach((object) => {
-        this.setMaterial(object, material)
-      })
-    }
   }
 
   resize () {
@@ -108,12 +83,12 @@ export default class Capsule {
           x: 0,
           y: 0,
           z: 0,
-          duration: 1,
+          duration: 2,
           ease: 'power2.inOut'
         })
         .to(this.container.position, {
           y: this.topPosition,
-          duration: 1,
+          duration: 2,
           ease: 'power2.inOut',
           onComplete: () => {
             this.dragDropController.updateBasePosition()

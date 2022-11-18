@@ -40,8 +40,8 @@ export default class Webgl {
   }
 
   setCamera () {
-    this.camera = new PerspectiveCamera(45, this.width / this.height, 1, 1000)
-    this.camera.position.set(0, 0, 12)
+    this.camera = new PerspectiveCamera(15, this.width / this.height, 1, 1000)
+    this.camera.position.set(0, 0, 35)
     this.scene.add(this.camera)
   }
 
