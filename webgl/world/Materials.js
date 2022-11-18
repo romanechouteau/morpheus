@@ -13,6 +13,7 @@ class Materials {
   load () {
     return Promise.all([
       this.loadTexture('white', require('~/assets/textures/white_shiny.png')),
+      this.loadTexture('white_matte', require('~/assets/textures/white_matte.png')),
       this.loadTexture('black_shiny', require('~/assets/textures/black_shiny.png')),
       this.loadTexture('black_matte', require('~/assets/textures/black_matte.png')),
       this.loadTexture('chrome', require('~/assets/textures/chrome.png'))
@@ -22,6 +23,9 @@ class Materials {
   init () {
     this.whiteMaterial = new MeshMatcapMaterial({
       matcap: this.textures.white
+    })
+    this.whiteMatteMaterial = new MeshMatcapMaterial({
+      matcap: this.textures.white_matte
     })
     this.blackMatteMaterial = new MeshMatcapMaterial({
       matcap: this.textures.black_matte,
@@ -43,6 +47,11 @@ class Materials {
 
       if (group.name.includes('white')) {
         this.setMaterial(group, this.whiteMaterial)
+        continue
+      }
+
+      if (group.name.includes('whte_matte')) {
+        this.setMaterial(group, this.whiteMatteMaterial)
         continue
       }
 
