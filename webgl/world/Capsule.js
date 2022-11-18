@@ -109,9 +109,9 @@ export default class Capsule {
     } else if (val === STEPS.MORPHEUS) {
       const current = this.container.position.y
       gsap.to(this.container.position, {
-        y: current - this.height * 0.22,
+        y: current - this.height * 0.28,
         duration: 1,
-        delay: 0.5,
+        delay: 0.6,
         ease: 'linear'
       })
     }
