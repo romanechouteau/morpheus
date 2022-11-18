@@ -143,10 +143,14 @@ export default class Screen {
   }
 
   async formatTemp () {
-    const meteoData = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${this.localisation[0]}&lon=${this.localisation[1]}&appid=9ee99ca097bcd7aad431d1d1d6452685&lang=fr&units=metric`)
-    const json = await meteoData.json()
-    this.tempChanged = true
-    return `${Math.round(json.main.temp).toString().padStart(2, '0')}°c`
+    try {
+      const meteoData = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.localisation[0]}&lon=${this.localisation[1]}&appid=${process.env.NUXT_ENV_WEATHER_ID}&lang=fr&units=metric`)
+      const json = await meteoData.json()
+      this.tempChanged = true
+      return `${Math.round(json.main.temp).toString().padStart(2, '0')}°c`
+    } catch {
+      return '19°c'
+    }
   }
 
   formatState () {

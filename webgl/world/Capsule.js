@@ -55,11 +55,13 @@ export default class Capsule {
       ease: 'power2.inOut',
       onComplete: () => {
         this.hide = false
-        this.dragRotateController.start()
-        setTimeout(() => {
-          this.animation.play()
-          this.mixer.addEventListener('loop', this.animationFinished)
-        }, 500)
+        if (this.top !== true) {
+          this.dragRotateController.start()
+          setTimeout(() => {
+            this.animation.play()
+            this.mixer.addEventListener('loop', this.animationFinished)
+          }, 500)
+        }
       }
     })
   }
