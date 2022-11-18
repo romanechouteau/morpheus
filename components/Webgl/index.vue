@@ -1,7 +1,7 @@
 <template>
   <div role="none" class="webgl">
     <canvas id="canvas-3D" ref="webglCanvas" />
-    <div v-if="!isLoaded" class="loader" />
+    <Loader v-if="!isLoaded" />
   </div>
 </template>
 
@@ -10,7 +10,12 @@ import Vue from 'vue'
 
 import Webgl from '~/webgl/index'
 
+import Loader from '~/components/UI/Loader.vue'
+
 export default Vue.extend({
+  components: {
+    Loader
+  },
   data () {
     return {
       webgl: undefined
@@ -69,13 +74,4 @@ export default Vue.extend({
     left 0;
     width 100%;
     height 100%;
-
-.loader
-  position absolute;
-  top 0;
-  left 0;
-  width 100%;
-  height 100%;
-  overflow hidden;
-  background-color red;
 </style>

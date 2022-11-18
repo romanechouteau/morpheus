@@ -17,6 +17,7 @@ export default {
 <style lang="stylus" scoped>
 .button
   position absolute
+  z-index 2
   right 2.5em
   border-radius 25%
   cursor pointer
