@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { Object3D, AnimationMixer, LoopPingPong } from 'three'
+import { Object3D, AnimationMixer, LoopPingPong, Clock } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
@@ -10,10 +10,10 @@ import materials from './Materials'
 import { GLTF_SCALE } from '.'
 
 export default class Capsule {
-  constructor ({ webgl, mouse, clock }) {
+  constructor ({ webgl, mouse }) {
     this.webgl = webgl
     this.mouse = mouse
-    this.clock = clock
+    this.clock = new Clock()
 
     this.top = false
     this.hide = true
@@ -66,12 +66,12 @@ export default class Capsule {
   resize () {
     const sizeData = getObjectSizeData(this.webgl.camera, this.container)
 
-    const height = sizeData.height
+    this.height = sizeData.height
     const windowHeight = sizeData.windowHeight
-    this.topPosition = windowHeight / 2 - height * 0.75
-    const hidePosition = windowHeight / 2 + height
+    this.topPosition = windowHeight / 2 - this.height * 0.75
+    const hidePosition = windowHeight / 2 + this.height
 
-    this.dragDropController.resize(height, windowHeight)
+    this.dragDropController.resize(this.height, windowHeight)
 
     if (!this.customY) {
       this.container.position.y = this.hide ? hidePosition : this.top ? this.topPosition : 0
@@ -103,10 +103,17 @@ export default class Capsule {
           ease: 'power2.inOut',
           onComplete: () => {
             this.dragDropController.updateBasePosition()
-            this.dragDropController.start()
             this.customY = true
           }
         }, '0')
+    } else if (val === STEPS.MORPHEUS) {
+      const current = this.container.position.y
+      gsap.to(this.container.position, {
+        y: current - this.height * 0.22,
+        duration: 1,
+        delay: 0.5,
+        ease: 'linear'
+      })
     }
   }
 }

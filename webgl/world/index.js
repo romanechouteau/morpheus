@@ -12,11 +12,10 @@ import materials from './Materials'
 export const GLTF_SCALE = 0.05
 
 export default class World {
-  constructor ({ webgl, camera, mouse, clock }) {
+  constructor ({ webgl, camera, mouse }) {
     this.mouse = mouse
     this.webgl = webgl
     this.camera = camera
-    this.clock = clock
 
     this.container = new Object3D()
     this.machineContainer = new Object3D()
@@ -39,8 +38,7 @@ export default class World {
   setCapsule () {
     this.capsule = new Capsule({
       webgl: this.webgl,
-      mouse: this.mouse,
-      clock: this.clock
+      mouse: this.mouse
     })
 
     this.machineContainer.add(this.capsule.container)

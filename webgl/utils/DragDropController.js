@@ -73,7 +73,7 @@ export default class DragDropController {
   }
 
   checkPosition () {
-    if (this.destination === undefined) { return null }
+    if (this.destination === undefined || this.active === false) { return null }
 
     if (
       (!this.isHorizontal && this.container.position.y - this.size * 0.5 < this.destination) ||

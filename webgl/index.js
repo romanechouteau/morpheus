@@ -1,4 +1,4 @@
-import { WebGLRenderer, sRGBEncoding, PerspectiveCamera, Scene, Clock } from 'three'
+import { WebGLRenderer, sRGBEncoding, PerspectiveCamera, Scene } from 'three'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
 import Mouse from '~/tools/Mouse'
@@ -13,7 +13,6 @@ export default class Webgl {
     this.isLoaded = false
     this.pixelRatio = this.getPixelRatio()
     this.store = store
-    this.clock = new Clock()
 
     this.resize(window.innerWidth, window.innerHeight)
     this.setRenderer()
@@ -60,8 +59,7 @@ export default class Webgl {
     this.world = new World({
       webgl: this,
       camera: this.camera,
-      mouse: this.mouse,
-      clock: this.clock
+      mouse: this.mouse
     })
     this.scene.add(this.world.container)
   }
