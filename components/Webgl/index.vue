@@ -2,6 +2,7 @@
   <div role="none" class="webgl">
     <canvas id="canvas-3D" ref="webglCanvas" />
     <Loader v-if="!isLoaded" />
+    <Grain />
   </div>
 </template>
 
@@ -11,10 +12,12 @@ import Vue from 'vue'
 import Webgl from '~/webgl/index'
 
 import Loader from '~/components/UI/Loader.vue'
+import Grain from '~/components/UI/Grain.vue'
 
 export default Vue.extend({
   components: {
-    Loader
+    Loader,
+    Grain
   },
   data () {
     return {
