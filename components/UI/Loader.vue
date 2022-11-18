@@ -1,6 +1,6 @@
 <template>
   <div class="loader">
-    <img class="logo-loader rotating" src="../../assets/logo-loader.svg" alt="">
+    <img class="logo-loader pulse" src="../../assets/loader.svg" alt="">
   </div>
 </template>
 <style lang="stylus" scoped>
@@ -21,15 +21,15 @@
 .logo-loader
     width: 6em
     user-select: none
-.rotating
-  animation rotating 2.5s linear infinite
+.pulse
+  animation pulse 1.5s linear infinite
 
-@keyframes rotating
+@keyframes pulse
   0%
-    transform rotate(0deg)
-  20%
-    transform rotate(-35deg)
+    transform scale(0)
+    opacity 1
   100%
-    transform: rotate(360deg)
+    transform scale(.5)
+    opacity 0
 
 </style>

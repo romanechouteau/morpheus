@@ -4,7 +4,7 @@
 <style lang="stylus" scoped>
 .logo
   position fixed
-  z-index 1
+  z-index 2
   padding 1.5em
   user-select none
 </style>
