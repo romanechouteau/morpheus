@@ -102,10 +102,10 @@ export default class Screen {
         uInterface: { value: this.texture },
         uMeshRatio: { value: geomRatio },
         uInterfaceRatio: { value: CANVAS_HEIGHT / CANVAS_WIDTH },
-        color1: { value: [221 / 255, 1 / 255, 145 / 255] },
-        color2: { value: [147 / 255, 49 / 255, 213 / 255] },
-        color3: { value: [121 / 255, 87 / 255, 241 / 255] },
-        color4: { value: [47 / 255, 171 / 255, 253 / 255] }
+        color1: { value: [233 / 255, 205 / 255, 133 / 255] },
+        color2: { value: [210 / 255, 165 / 255, 111 / 255] },
+        color3: { value: [206 / 255, 152 / 255, 121 / 255] },
+        color4: { value: [214 / 255, 153 / 255, 140 / 255] }
       }
     })
     this.screen.material = this.screenMaterial
