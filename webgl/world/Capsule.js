@@ -31,6 +31,9 @@ export default class Capsule {
 
     materials.setMaterials(this.gltf.scene.children[0])
 
+    this.gltf.scene.children[0].rotation.x = Math.PI
+    this.gltf.scene.children[0].rotation.y = Math.PI
+
     this.mixer = new AnimationMixer(this.gltf.scene)
     const animation = this.gltf.animations[0]
     this.animation = this.mixer.clipAction(animation)
