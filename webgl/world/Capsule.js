@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { Object3D, AnimationMixer, LoopPingPong, Clock } from 'three'
+import { Object3D, AnimationMixer, LoopPingPong, Clock, LoopOnce } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
@@ -58,9 +58,14 @@ export default class Capsule {
         this.dragRotateController.start()
         setTimeout(() => {
           this.animation.play()
+          this.mixer.addEventListener('finished', this.animationFinished)
         }, 500)
       }
     })
+  }
+
+  animationFinished = () => {
+    this.animationPlayed = true
   }
 
   resize () {
@@ -88,6 +93,13 @@ export default class Capsule {
     if (val === STEPS.PLUG_CAPSULE) {
       this.top = true
       this.dragRotateController.stop()
+
+      if (!this.animationPlayed) {
+        this.animation.loop = LoopOnce
+        this.animation.paused = false
+        this.animation.timeScale = -1
+        this.animation.play()
+      }
 
       gsap.timeline()
         .to(this.container.rotation, {
