@@ -9,7 +9,7 @@ void main() {
   vec3 whiteColor = vec3(0.9, 0.9, 0.9);
 
   float dist = distance(vUv, vec2(0.5, 0.5));
-  vec3 white = whiteColor * (1. - dist);
+  vec3 white = whiteColor * (1. - dist) * 1.5;
 
   vec3 color = mix(blackColor, white, uFade);
 
