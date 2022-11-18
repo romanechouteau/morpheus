@@ -58,7 +58,7 @@ export default class Capsule {
         this.dragRotateController.start()
         setTimeout(() => {
           this.animation.play()
-          this.mixer.addEventListener('finished', this.animationFinished)
+          this.mixer.addEventListener('loop', this.animationFinished)
         }, 500)
       }
     })

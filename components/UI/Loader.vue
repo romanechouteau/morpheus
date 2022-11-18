@@ -16,9 +16,11 @@
   justify-content center
   align-items center
   background white
+  user-select: none
 
 .logo-loader
     width: 6em
+    user-select: none
 .rotating
   animation rotating 2.5s linear infinite
 

@@ -31,6 +31,7 @@ export default {
   height 100vh;
   opacity 0;
   background-image linear-gradient(-270deg, rgba(0,0,0,0),rgba(0,0,0,0.1))
+  user-select: none
   transition opacity 0.5s ease
   &.hover
     opacity 1;

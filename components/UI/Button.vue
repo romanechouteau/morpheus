@@ -22,6 +22,7 @@ export default {
   border-radius 25%
   cursor pointer
   transition right .3s ease
+  user-select: none
   &:hover
     right 2em
 
