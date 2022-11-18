@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { Object3D } from 'three'
+import { Object3D, AnimationMixer, LoopPingPong } from 'three'
 
 import DragDropController from '../utils/DragDropController'
 import DragRotateController from '../utils/DragRotateController'
@@ -10,9 +10,10 @@ import materials from './Materials'
 import { GLTF_SCALE } from '.'
 
 export default class Capsule {
-  constructor ({ webgl, mouse }) {
+  constructor ({ webgl, mouse, clock }) {
     this.webgl = webgl
     this.mouse = mouse
+    this.clock = clock
 
     this.top = false
     this.hide = true
@@ -30,11 +31,16 @@ export default class Capsule {
 
     materials.setMaterials(this.gltf.scene.children[0])
 
+    this.mixer = new AnimationMixer(this.gltf.scene)
+    const animation = this.gltf.animations[0]
+    this.animation = this.mixer.clipAction(animation)
+    this.animation.loop = LoopPingPong
+    this.animation.repetitions = 2
+
     this.dragRotateController = new DragRotateController({
       container: this.container,
       mouse: this.mouse
     })
-    this.dragRotateController.start()
 
     this.dragDropController = new DragDropController({
       container: this.container,
@@ -49,6 +55,10 @@ export default class Capsule {
       ease: 'power2.inOut',
       onComplete: () => {
         this.hide = false
+        this.dragRotateController.start()
+        setTimeout(() => {
+          this.animation.play()
+        }, 500)
       }
     })
   }
@@ -71,6 +81,7 @@ export default class Capsule {
   render () {
     if (this.dragRotateController) { this.dragRotateController.update() }
     if (this.dragDropController) { this.dragDropController.update() }
+    if (this.mixer) { this.mixer.update(this.clock.getDelta()) }
   }
 
   handleStep (val) {
