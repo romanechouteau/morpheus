@@ -28,7 +28,7 @@ export default class Machine {
   }
 
   init () {
-    this.container.scale.set(GLTF_SCALE * 1.03, GLTF_SCALE * 1.03, GLTF_SCALE * 1.03)
+    this.container.scale.set(GLTF_SCALE * 1.08, GLTF_SCALE * 1.08, GLTF_SCALE * 1.08)
     this.container.position.x = -0.035
     this.container.add(this.gltf.scene)
 
